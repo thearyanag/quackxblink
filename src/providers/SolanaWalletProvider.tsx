@@ -32,8 +32,8 @@ export default function SolanaWalletProvider({
     () => [
       new TipLinkWalletAdapter({
         title: "Quack.fun",
-        clientId: "--",
-        theme: "dark", // pick between "dark"/"light"/"system"
+        clientId: "1c641a2e-82c6-4b34-ba4e-cf426fca53de",
+        theme: "dark",
       }),
     ],
     []
@@ -43,11 +43,9 @@ export default function SolanaWalletProvider({
 
   return (
     <WalletProvider wallets={wallets} autoConnect>
-      <Suspense>
-        <TipLinkWalletAutoConnectV2 isReady query={searchParams}>
-          <ReactWalletModalProvider>{children}</ReactWalletModalProvider>
-        </TipLinkWalletAutoConnectV2>
-      </Suspense>
+      <TipLinkWalletAutoConnectV2 isReady query={searchParams}>
+        <ReactWalletModalProvider>{children}</ReactWalletModalProvider>
+      </TipLinkWalletAutoConnectV2>
     </WalletProvider>
   );
 }
