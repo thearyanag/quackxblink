@@ -1,0 +1,32 @@
+{
+    "icon": "https://utfs.io/f/a561906a-e38f-465c-94ac-6cfd96081c2e-1t0hkp.png",
+    "label": "Donate SOL",
+    "title": "Donate to Cubik",
+    "description": "A decentralized grants distribution platform for solana community",
+    "links": {
+        "actions": [
+            {
+                "label": "Donate 0.1 SOL",
+                "href": "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount=0.1"
+            },
+            {
+                "label": "Donate 0.5 SOL",
+                "href": "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount=0.5"
+            },
+            {
+                "label": "Donate 1 SOL",
+                "href": "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount=1"
+            },
+            {
+                "label": "Donate SOL",
+                "href": "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount={amount}",
+                "parameters": [
+                    {
+                        "name": "amount",
+                        "label": "SOL amount"
+                    }
+                ]
+            }
+        ]
+    }
+}

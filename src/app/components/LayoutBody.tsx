@@ -1,9 +1,9 @@
 "use client";
-import { Inter } from "next/font/google";
 import React from "react";
 import BottomNavBar from "./BottomNavBar";
 import TopNavBar from "./TopNavBar";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { usePathname } from 'next/navigation';
 
 export default function LayoutBody({
   children,
@@ -11,11 +11,15 @@ export default function LayoutBody({
   children: React.ReactNode;
 }>) {
   const { publicKey, connected } = useWallet();
+  const pathname = usePathname();
+
+  const showNavbar = connected && pathname !== '/developers';
+
   return (
     <div className={`flex flex-col min-h-screen`}>
-      {connected && <TopNavBar />}
-      <div className={`flex-grow ${connected ? "py-16" : ""}`}>{children}</div>
-      {connected && <BottomNavBar />}
+      {showNavbar && <TopNavBar />}
+      <div className={`flex-grow ${showNavbar ? "py-16" : ""}`}>{children}</div>
+      {showNavbar && <BottomNavBar />}
     </div>
   );
 }
