@@ -5,6 +5,7 @@ import { GoogleViaTipLinkWalletName } from "@tiplink/wallet-adapter";
 import { useWallet } from "@solana/wallet-adapter-react";
 import LoginScreen from "./components/LoginScreen";
 import HomePage from "./components/Homepage";
+import Landing from "./components/Landing";
 
 export default function Home() {
   const { select, connect, publicKey, connected, disconnect } = useWallet();
@@ -20,11 +21,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-yellow-50">
-      {!connected ? (
+      {/* {!connected ? (
         <LoginScreen onGoogleLogin={loginViaTipLink} />
       ) : (
         <HomePage />
-      )}
+      )} */}
+
+      <Landing />
     </main>
   );
 }
