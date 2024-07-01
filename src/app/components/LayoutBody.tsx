@@ -14,7 +14,6 @@ export default function LayoutBody({
   const pathname = usePathname();
 
   let showNavbar = connected && pathname !== '/developers';
-  showNavbar = false;
 
   return (
     <div className={`flex flex-col min-h-screen`}>
