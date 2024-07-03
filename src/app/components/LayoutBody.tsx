@@ -13,8 +13,8 @@ export default function LayoutBody({
   const { publicKey, connected } = useWallet();
   const pathname = usePathname();
 
-  // let showNavbar = connected && pathname !== '/developers';
-  let showNavbar = false;
+  let showNavbar = connected && pathname !== '/developers';
+  // let showNavbar = false;
   return (
     <div className={`flex flex-col min-h-screen`}>
       {showNavbar && <TopNavBar />}

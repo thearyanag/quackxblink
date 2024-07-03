@@ -21,13 +21,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-yellow-50">
-      {/* {!connected ? (
+      {!connected ? (
         <LoginScreen onGoogleLogin={loginViaTipLink} />
       ) : (
         <HomePage />
-      )} */}
+      )}
 
-      <Landing />
+      {/* <Landing /> */}
     </main>
   );
 }
