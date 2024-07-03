@@ -7,6 +7,7 @@ import BottomNavBar from "./components/BottomNavBar";
 import { APP_TITLE, APP_DESCRIPTION } from "@/app/utils/const";
 import LayoutBody from "./components/LayoutBody";
 import { headers } from "next/headers";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,7 +67,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Suspense>
           <SolanaWalletProvider>
-            <LayoutBody>{children}</LayoutBody>
+            <LayoutBody>{children}
+              <Analytics />
+            </LayoutBody>
           </SolanaWalletProvider>
         </Suspense>
       </body>
