@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import BlinkCard, { CardProps } from "./BlinkCard";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface Action {
   label: string;
@@ -20,6 +21,7 @@ interface IProperties {
   links: {
     actions: Action[];
   };
+  apiPath: string;
 }
 
 const findFirstParameterLabel = (actions: Action[]): string => {
@@ -39,9 +41,15 @@ export default function Validator({
   const defaultURL = "https://www.cubik.so/p/quack";
   let [inputUrl, setInputUrl] = useState("");
   const [cardData, setCardData] = useState<CardProps | null>(null);
+  const [inputAddress, setInputAddress] = useState("");
+  const [baseDomain, setBaseDomain] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputUrl(e.target.value);
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputAddress(e.target.value);
   };
 
   const handleSubmit = async () => {
@@ -67,6 +75,10 @@ export default function Validator({
         inputText: inputText,
         borderColor: "green",
       });
+
+      console.log("Base Domain:")
+      console.log(baseDomain)
+      setBaseDomain(data.apiPath);
 
       onDataFetched(data);
     } catch (error) {
@@ -97,6 +109,15 @@ export default function Validator({
           Fetch
         </button>
       </div>
+      <div className="mb-4 flex">
+        <input
+          type="text"
+          value={inputAddress}
+          onChange={handleAddressChange}
+          placeholder="3LSKaEYJx55PMe3VgNgKqN4nHpRvD9iT2gnwnS4hckVL"
+          className="w-full p-2 bg-yellow-300 text-yellow-800 rounded-l-2xl"
+        />
+      </div>
       {cardData && (
         <div className="flex justify-center">
           <div className="w-1/2">
@@ -106,7 +127,13 @@ export default function Validator({
       )}
       <div className="mt-2 text-center">
         <span className="bg-gray-700 p-2 rounded text-m">
-          <strong>{inputUrl}</strong>
+          <strong>{baseDomain}</strong>{" "}
+          <CopyToClipboard
+            text={baseDomain}
+            onCopy={() => alert("Copied to clipboard")}
+          >
+            <button className="italic">Copy</button>
+          </CopyToClipboard>
         </span>
       </div>
     </div>

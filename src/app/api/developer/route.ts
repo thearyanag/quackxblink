@@ -26,6 +26,7 @@ interface Properties {
   links: {
     actions: Action[];
   };
+  apiPath: string;
 }
 
 function matchPattern(pattern: string, path: string): boolean {
@@ -119,6 +120,7 @@ export async function GET(request: NextRequest) {
           parameters: action.parameters,
         })),
       },
+      apiPath: new URL(newURL).origin,
     };
 
     return NextResponse.json(properties);

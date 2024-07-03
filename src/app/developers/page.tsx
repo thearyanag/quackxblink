@@ -22,7 +22,6 @@ interface IProperties {
   };
 }
 
-
 export default function Page() {
   const [fetchedData, setFetchedData] = useState<IProperties | null>(null);
 

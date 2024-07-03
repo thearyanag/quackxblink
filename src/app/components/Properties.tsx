@@ -1,5 +1,6 @@
 // components/Properties.tsx
-import React from 'react';
+import React from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface Action {
   label: string;
@@ -21,16 +22,25 @@ interface Properties {
 }
 
 const renderValue = (value: any): string => {
-  if (typeof value === 'string') return value;
+  if (typeof value === "string") return value;
   if (Array.isArray(value)) return `[${value.length} items]`;
-  if (typeof value === 'object') return JSON.stringify(value);
+  if (typeof value === "object") return JSON.stringify(value);
   return String(value);
 };
 
-const PropertyRow: React.FC<{ label: string; value: any }> = ({ label, value }) => (
+const PropertyRow: React.FC<{ label: string; value: any }> = ({
+  label,
+  value,
+}) => (
   <div className="flex flex-col sm:flex-row justify-between bg-gray-800 p-2 rounded">
     <span className="font-semibold mb-1 sm:mb-0">{label}</span>
-    <span className="text-green-400 break-all">{renderValue(value)}</span>
+    <CopyToClipboard text={renderValue(value)} onCopy={() => alert("Copied!")}>
+      <button className="text-sm text-gray-400 hover:text-white">
+        Copy
+      </button>
+    </CopyToClipboard>
+      <span className="text-green-400 break-all">{renderValue(value)}</span>
+
   </div>
 );
 
@@ -48,14 +58,28 @@ const Properties: React.FC<{ data: Properties | null }> = ({ data }) => {
         <PropertyRow label="description" value={data.description} />
         {data.links.actions.map((action, index) => (
           <React.Fragment key={index}>
-            <PropertyRow label={`links:actions:${index}:label`} value={action.label} />
-            <PropertyRow label={`links:actions:${index}:href`} value={action.href} />
-            {action.parameters && action.parameters.map((param, paramIndex) => (
-              <React.Fragment key={paramIndex}>
-                <PropertyRow label={`links:actions:${index}:parameters:${paramIndex}:name`} value={param.name} />
-                <PropertyRow label={`links:actions:${index}:parameters:${paramIndex}:label`} value={param.label} />
-              </React.Fragment>
-            ))}
+            <PropertyRow
+              label={`links:actions:${index}:label`}
+              value={action.label}
+            />
+
+            <PropertyRow
+              label={`links:actions:${index}:href`}
+              value={action.href}
+            />
+            {action.parameters &&
+              action.parameters.map((param, paramIndex) => (
+                <React.Fragment key={paramIndex}>
+                  <PropertyRow
+                    label={`links:actions:${index}:parameters:${paramIndex}:name`}
+                    value={param.name}
+                  />
+                  <PropertyRow
+                    label={`links:actions:${index}:parameters:${paramIndex}:label`}
+                    value={param.label}
+                  />
+                </React.Fragment>
+              ))}
           </React.Fragment>
         ))}
       </div>
