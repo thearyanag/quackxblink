@@ -1,41 +1,112 @@
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import BlinkCard, { CardProps } from "./BlinkCard";
 
-export default function Validator() {
-  const cubik: CardProps = {
-    name: "Donate to Cubik",
-    description:
-      "A decentralized grants distribution platform for solana community",
-    image: "https://utfs.io/f/a561906a-e38f-465c-94ac-6cfd96081c2e-1t0hkp.png",
-    buttons: [
-      { label: "Donate 1 USDC", onClick: () => console.log("5 min clicked") },
-      { label: "Donate 5 USDC", onClick: () => console.log("10 min clicked") },
-      { label: "Donate 10 USDC", onClick: () => console.log("15 min clicked") },
-    ],
-    inputText: "SOL Amount",
-    borderColor: "green",
+interface Action {
+  label: string;
+  href: string;
+  parameters?: Array<{
+    name: string;
+    label: string;
+  }>;
+}
+
+interface IProperties {
+  label: string;
+  title: string;
+  icon: string;
+  description: string;
+  links: {
+    actions: Action[];
   };
+}
+
+const findFirstParameterLabel = (actions: Action[]): string => {
+  for (const action of actions) {
+    if (action.parameters && action.parameters.length > 0) {
+      return action.parameters[0].label;
+    }
+  }
+  return "SOL Amount"; // Default value if no parameter is found
+};
+
+export default function Validator({
+  onDataFetched,
+}: {
+  onDataFetched: (data: IProperties) => void;
+}) {
+  const defaultURL = "https://www.cubik.so/p/quack";
+  let [inputUrl, setInputUrl] = useState("");
+  const [cardData, setCardData] = useState<CardProps | null>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputUrl(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (!inputUrl) inputUrl = defaultURL;
+      const response = await fetch(
+        `/api/developer?url=${encodeURIComponent(inputUrl)}`
+      );
+      const data = await response.json();
+
+      const inputText = findFirstParameterLabel(data.links.actions);
+
+      console.log("Fetched data:", data);
+
+      setCardData({
+        name: data.title,
+        description: data.description,
+        image: data.icon, // Use the icon field for the image
+        buttons: data.links.actions.map((action: Action) => ({
+          label: action.label,
+          onClick: () => console.log(`Clicked: ${action.label}`),
+        })),
+        inputText: inputText,
+        borderColor: "green",
+      });
+
+      onDataFetched(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    setInputUrl(defaultURL);
+    handleSubmit();
+  }, []);
 
   return (
     <div className="w-full max-w-2xl mx-auto p-4">
       <h1 className="text-2xl mb-4 font-bold text-yellow-800">Validator</h1>
       <hr className="mb-4 border-yellow-400" />
-      <div className="mb-4">
+      <div className="mb-4 flex">
         <input
           type="text"
+          value={inputUrl}
+          onChange={handleInputChange}
           placeholder="https://blink.quack.fun"
-          className="w-full p-2 bg-yellow-300 text-yellow-800 rounded-2xl"
+          className="w-full p-2 bg-yellow-300 text-yellow-800 rounded-l-2xl"
         />
+        <button
+          onClick={handleSubmit}
+          className="bg-yellow-500 text-yellow-900 px-4 rounded-r-2xl hover:bg-yellow-600"
+        >
+          Fetch
+        </button>
       </div>
-      <div className="flex justify-center">
-        <div className="w-1/2">
-          <BlinkCard {...cubik} />
+      {cardData && (
+        <div className="flex justify-center">
+          <div className="w-1/2">
+            <BlinkCard {...cardData} />
+          </div>
         </div>
-      </div>
+      )}
       <div className="mt-2 text-center">
         <span className="bg-gray-700 p-2 rounded text-m">
-          <strong>https://blinks.cubik.so/contribution/cubik</strong>
+          <strong>{inputUrl}</strong>
         </span>
       </div>
     </div>

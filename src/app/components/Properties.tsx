@@ -13,43 +13,12 @@ interface Action {
 interface Properties {
   label: string;
   title: string;
+  icon: string;
   description: string;
   links: {
     actions: Action[];
   };
 }
-
-const properties: Properties = {
-  label: "Donate SOL",
-  title: "Donate to Cubik",
-  description: "A decentralized grants distribution platform for solana community",
-  links: {
-    actions: [
-      {
-        label: "Donate 0.1 SOL",
-        href: "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount=0.1"
-      },
-      {
-        label: "Donate 0.5 SOL",
-        href: "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount=0.5"
-      },
-      {
-        label: "Donate 1 SOL",
-        href: "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount=1"
-      },
-      {
-        label: "Donate SOL",
-        href: "/tip/tx?projectAccount=4LhThqpUeJmbmvRmu7pnbEah3KEDeW4LACdrqPFSnY5M&amount={amount}",
-        parameters: [
-          {
-            name: "amount",
-            label: "SOL amount"
-          }
-        ]
-      }
-    ]
-  }
-};
 
 const renderValue = (value: any): string => {
   if (typeof value === 'string') return value;
@@ -65,16 +34,19 @@ const PropertyRow: React.FC<{ label: string; value: any }> = ({ label, value }) 
   </div>
 );
 
-const Properties: React.FC = () => {
+const Properties: React.FC<{ data: Properties | null }> = ({ data }) => {
+  if (!data) return null;
+
   return (
     <div className="w-full max-w-2xl p-4 border-l-2 border-yellow-800">
       <h2 className="text-xl mb-4 font-bold text-yellow-800">Properties</h2>
       <hr className="mb-4 border-yellow-400" />
       <div className="space-y-2">
-        <PropertyRow label="label" value={properties.label} />
-        <PropertyRow label="title" value={properties.title} />
-        <PropertyRow label="description" value={properties.description} />
-        {properties.links.actions.map((action, index) => (
+        <PropertyRow label="label" value={data.label} />
+        <PropertyRow label="title" value={data.title} />
+        <PropertyRow label="icon" value={data.icon} />
+        <PropertyRow label="description" value={data.description} />
+        {data.links.actions.map((action, index) => (
           <React.Fragment key={index}>
             <PropertyRow label={`links:actions:${index}:label`} value={action.label} />
             <PropertyRow label={`links:actions:${index}:href`} value={action.href} />
